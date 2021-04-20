@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block meta %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="login">
+    <div class="login-triangle"></div>
+    <h2 class="login-header">Administración de Database</h2>
+    <form class="login-container" action="{{ url_for('auth.login') }}" method= post>
+      <p><input type="text" placeholder="Usuario" name="user"></p>
+      <p><input  type="password" placeholder="Contraseña"  name="password"></p>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class=>{{ messages[0] }} </div>
+        {% endif %}
+      {% endwith %}
+      <p><input type="submit" value="Iniciar Sesión"></p>
+    </form>
+  </div>
+{% endblock %}

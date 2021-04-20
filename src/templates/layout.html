@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="static/images/favicon.ico">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+  <script src="{{ url_for('static', filename='scripts/jquery-3.6.0.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='scripts/bootstrap.js') }}"></script>
+  <title>TFT Challenge</title>
+  {% block meta%}{% endblock %}
+</head>
+
+<body>
+  <nav class="navbar sticky-top navbar-dark navbar-expand-lg bg-dark ">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Team Figth Tactics Challenge</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse " id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">Clasificación</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{{ url_for('main.about') }}">Sobre Nosotros</a>
+          </li>
+          {% if current_user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{{ url_for('main.admin') }}">Administración</a>
+          </li>
+          <li class="nav-item float-left">
+            <a class="nav-link textoBlanco" href="{{ url_for('auth.logout') }}"> Logout </a>
+          </li>
+            {% else %}
+          <li class="nav-item float-left">
+            <a class="nav-link textoBlanco" href="{{ url_for('auth.login') }}">Login</a>
+          </li>
+          {% endif %}
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container p-4">
+    {% block content %}
+    {% endblock %}
+  </div>
+
+
+
+</body>
+
+</html>

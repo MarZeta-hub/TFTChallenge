@@ -1,0 +1,80 @@
+body{
+    background: url("../images/amumu.jpg") center center fixed no-repeat; 
+    background-repeat:no-repeat;
+    background-size: cover;
+}
+.opacity{
+        opacity: 0.9;
+}
+.page-header{
+    margin-bottom: 20px;
+    color: white;
+}
+
+.navbarFixed{
+    overflow: hidden;
+    top:0;
+    position: fixed;
+}
+
+.cAccounts{
+    display:flex;
+    border: 1px solid #000000;
+    background-color: white;
+    border-top-right-radius: 15px;
+    z-index: 1;
+    margin-bottom: 15px;
+}
+
+.actividad{
+    width:1%;
+    background-color: #4e4e4e;
+}
+
+.position{
+    width: 4%;
+    margin-left: 10px;
+}
+
+.name{
+    width: 25%;
+    margin-left: 10px;
+    margin-right:10px;
+}
+
+.liga{
+    width: 30%;
+}
+
+.ptotal{
+    width: 6%;
+}
+
+.tituloConBoton{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.derecha{
+    margin-left: auto;
+}
+
+.busqueda{
+    display:flex;
+}
+
+.textoBlanco{
+    color: #ffffff;
+}
+
+@media (max-width:800px){
+    h3{
+        font-size: 15px;
+    }
+    h4{
+        font-size: 13px;
+    }
+
+}
+
