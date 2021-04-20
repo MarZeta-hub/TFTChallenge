@@ -1,12 +1,14 @@
 import sqlite3
 import time
+import psycopg2
 from src.user import User
 from riotwatcher import ApiError, TftWatcher
 
 class CRUDSummoners():
     my_region = 'euw1'
-    database = 'src/database/summoners.db'
-    apiRiotDataBase = 'src/database/riotapi'
+
+    def conectarBase(self):
+        return psycopg2.connect(host='ec2-35-174-35-242.compute-1.amazonaws.com', database="d2jupu9j7rqd7", user="rsqaemfmnjiqpw",  password="4049dfdb8302dbd1c5c86d5312d2d989ad0ee18fce5595758cc4872ffcfc77f1", sslmode='require')
 
     def createUser(self, name):
         # 1. Obtengo los datos del nuevo usuario
@@ -18,10 +20,10 @@ class CRUDSummoners():
         liga = self.getLiga(summoner[1])
         # 2. Agregar Datos en nuestra base de datos
         try:
-            con = sqlite3.connect(self.database)
+            con = self.conectarBase()
             cursorObj = con.cursor()
-            cursorObj.execute("INSERT INTO summoners VALUES('"+summoner[0]+"','"+summoner[1]+"',"+summoner[2]+")")
-            cursorObj.execute("INSERT INTO leagueTFT VALUES('"+summoner[1]+"','"+liga[0]+"','"+ liga[1]+"',"+ liga[2]+","+liga[3]+", "+liga[4]+")")
+            cursorObj.execute("INSERT INTO summoners (name, id, lvl) VALUES('"+summoner[0]+"','"+summoner[1]+"',"+summoner[2]+")")
+            cursorObj.execute("INSERT INTO leagueTFT (id, tier, rank, lp, ptotal, score) VALUES('"+summoner[1]+"','"+liga[0]+"','"+ liga[1]+"',"+ liga[2]+","+liga[3]+", "+liga[4]+")")
             con.commit()
             con.close()
         except:
@@ -29,7 +31,7 @@ class CRUDSummoners():
 
     
     def readLeague(self):
-        con = sqlite3.connect(self.database)
+        con = self.conectarBase()
         cursorObj = con.cursor()
         cursorObj.execute('SELECT name, tier, rank, lp, ptotal, score, summoners.ID FROM summoners, leagueTFT where summoners.id = leagueTFT.id')
         read = cursorObj.fetchall()
@@ -38,7 +40,7 @@ class CRUDSummoners():
 
 
     def updateLeague(self):
-        con = sqlite3.connect(self.database)
+        con = self.conectarBase()
         cursorObj = con.cursor()
         cursorObj.execute('SELECT ID FROM summoners')
         ids = cursorObj.fetchall()
@@ -49,7 +51,7 @@ class CRUDSummoners():
         con.close()
 
     def deleteUser(self, name):
-        con = sqlite3.connect(self.database)
+        con =  self.conectarBase()
         cursorObj = con.cursor()
         cursorObj.execute('SELECT ID FROM summoners where name="'+name+'"')
         id = cursorObj.fetchall()
@@ -151,15 +153,19 @@ class CRUDSummoners():
         return lista
 
     def updateRiotApi(self,api):
-        f = open(self.apiRiotDataBase, "w")
-        f.write(api)
-        f.close()
+        con = self.conectarBase()
+        cursorObj = con.cursor()
+        cursorObj.execute("UPDATE riotAPI SET api='"+api+"' where valor='unica'")
+        con.commit()
+        con.close()
 
     def readApi(self):
-        f = open(self.apiRiotDataBase, "r")
-        apiRiot = f.read()
-        f.close()
-        return str(apiRiot)
+        con = self.conectarBase()
+        cursorObj = con.cursor()
+        cursorObj.execute("SELECT api FROM riotapi where valor = 'unica'")
+        read = cursorObj.fetchone()
+        con.close()
+        return read[0]
 
 class CRUDUser():
 
