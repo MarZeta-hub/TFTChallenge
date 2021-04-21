@@ -1,8 +1,8 @@
 from flask import render_template, request, flash, session, redirect, Blueprint
 from flask_login import login_required, current_user
 from src.crud import CRUDSummoners
-crud = CRUDSummoners()
 
+crud = CRUDSummoners()
 main = Blueprint('main', __name__)
 
 @main.route('/')
@@ -13,7 +13,10 @@ def Home():
 
 @main.route('/updateData')
 def updateData():
-    crud.updateLeague()
+    try:
+        crud.updateLeague()
+    except:
+        flash("Error al acceder a la Api de Riot.\n Póngase en contacto con el administrador de la página")
     return redirect("/")
 
 @main.route('/about')
@@ -30,7 +33,10 @@ def admin():
 @login_required
 def addSummoner():
     summoner = request.form.get("summonerNew")
-    crud.createUser(summoner)
+    try:
+        crud.createUser(summoner)
+    except:
+        flash("Error al acceder a la Api de Riot.")
     return redirect("/admin")
 
 @main.route('/addRiotApi', methods=['POST'])

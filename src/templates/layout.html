@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
   <script src="{{ url_for('static', filename='scripts/jquery-3.6.0.min.js') }}"></script>
   <script src="{{ url_for('static', filename='scripts/bootstrap.js') }}"></script>
+  <script src="{{ url_for('static', filename='scripts/modal.js') }}"></script>
   <title>TFT Challenge</title>
   {% block meta%}{% endblock %}
 </head>
@@ -53,7 +54,17 @@
     {% endblock %}
   </div>
 
-
+{% with message = get_flashed_messages() %}
+{% if message %}
+<div id="myModalError" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+        <p>{{ message[0] }}</p>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endwith %}
 
 </body>
 

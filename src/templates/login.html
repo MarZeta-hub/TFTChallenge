@@ -11,11 +11,6 @@
     <form class="login-container" action="{{ url_for('auth.login') }}" method= post>
       <p><input type="text" placeholder="Usuario" name="user"></p>
       <p><input  type="password" placeholder="Contraseña"  name="password"></p>
-      {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div class=>{{ messages[0] }} </div>
-        {% endif %}
-      {% endwith %}
       <p><input type="submit" value="Iniciar Sesión"></p>
     </form>
   </div>

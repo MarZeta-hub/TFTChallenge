@@ -12,22 +12,15 @@ class CRUDSummoners():
 
     def createUser(self, name):
         # 1. Obtengo los datos del nuevo usuario
-        try:
-            summoner = self.getSummoner(name)
-        except:
-            print(name)
-            return
+        summoner = self.getSummoner(name)
         liga = self.getLiga(summoner[1])
         # 2. Agregar Datos en nuestra base de datos
-        try:
-            con = self.conectarBase()
-            cursorObj = con.cursor()
-            cursorObj.execute("INSERT INTO summoners (name, id, lvl) VALUES('"+summoner[0]+"','"+summoner[1]+"',"+summoner[2]+")")
-            cursorObj.execute("INSERT INTO leagueTFT (id, tier, rank, lp, ptotal, score) VALUES('"+summoner[1]+"','"+liga[0]+"','"+ liga[1]+"',"+ liga[2]+","+liga[3]+", "+liga[4]+")")
-            con.commit()
-            con.close()
-        except:
-            print("El usuario "+name+" ya está en la base de datos")
+        con = self.conectarBase()
+        cursorObj = con.cursor()
+        cursorObj.execute("INSERT INTO summoners (name, id, lvl) VALUES('"+summoner[0]+"','"+summoner[1]+"',"+summoner[2]+")")
+        cursorObj.execute("INSERT INTO leagueTFT (id, tier, rank, lp, ptotal, score) VALUES('"+summoner[1]+"','"+liga[0]+"','"+ liga[1]+"',"+ liga[2]+","+liga[3]+", "+liga[4]+")")
+        con.commit()
+        con.close()
 
     
     def readLeague(self):
@@ -44,7 +37,7 @@ class CRUDSummoners():
         cursorObj = con.cursor()
         cursorObj.execute('SELECT ID FROM summoners')
         ids = cursorObj.fetchall()
-        for id in ids:
+        for id in ids:    
             liga = self.getLiga(id)
             cursorObj.execute("UPDATE leagueTFT SET tier ='"+liga[0]+"',rank='"+ liga[1]+"',lp="+ liga[2]+",ptotal="+liga[3]+", Score="+liga[4]+" where id ='"+id[0]+"'")
         con.commit()
@@ -75,10 +68,12 @@ class CRUDSummoners():
             ptotal = str(liga[0]["wins"] + liga[0]["losses"])
             score = str (self.obtenerScore(liga[0]['tier'],liga[0]['rank'],liga[0]['leaguePoints']))
             tier = self.englishToSpanish(tier)
-        except:
+        except IndexError:
             lp = "0"
             ptotal = "0"
             score = "0"
+        except:
+            raise Exception("Problemas para obtener datos de la api")
         return (tier, rank, lp, ptotal, score)
         
     def getSummoner(self, name):
@@ -86,9 +81,8 @@ class CRUDSummoners():
         watchertft = self.apiRiotInit()
         try:
             summoner = watchertft.summoner.by_name(self.my_region, name)
-        except ApiError:
-            print("El usuario no existe")
-            return
+        except:
+            raise Exception("Problemas para obtener datos de la api")
         return (summoner["name"], summoner["id"], str(summoner["summonerLevel"]))
     
     def apiRiotInit(self):
@@ -166,6 +160,7 @@ class CRUDSummoners():
         read = cursorObj.fetchone()
         con.close()
         return read[0]
+
 
 class CRUDUser():
 
