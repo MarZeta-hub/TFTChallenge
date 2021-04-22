@@ -20,7 +20,6 @@
       <th scope="col">P.total</th>
       <th scope="col">Score</th>
       <th scope="col">ID</th>
-      <th scope="col">Eliminar</th>
     </tr>
   </thead>
   <tbody>
@@ -33,7 +32,6 @@
       <td>{{user[4]}}</td>
       <td>{{user[5]}}</td>
       <td>{{user[6]}}</td>
-      <td>X</td>
     </tr>
     {% endfor %}
   </tbody>
@@ -54,6 +52,11 @@
           <input type="submit" name="submitSummoner" class="btn btn-primary" value="Añadir Invocador">
         </form>
         <br>
+        <h4>Eliminar Invocador</h4>
+        <form action="{{ url_for('main.removeSummoner') }}" method=post>
+          <input type="text"  name="summonerDelete" placeholder="Riot Api" required>
+          <input type="submit" name="submitdeleteSummoner" class="btn btn-primary" value="Eliminar Invocador">
+        </form>
         <h4>Añadir nueva Clave Api</h4>
         <form action="{{ url_for('main.addRiotApi') }}" method=post>
           <input type="text"  name="riotApi" placeholder="Riot Api" required>

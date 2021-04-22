@@ -39,6 +39,17 @@ def addSummoner():
         flash("Error al acceder a la Api de Riot.")
     return redirect("/admin")
 
+
+@main.route('/removeSummoner', methods=['POST'])
+@login_required
+def removeSummoner():
+    summoner = request.form.get("summonerDelete")
+    try:
+        crud.deleteUser(summoner)
+    except:
+        flash("No se ha encotrado al summoner")
+    return redirect("/admin")
+
 @main.route('/addRiotApi', methods=['POST'])
 @login_required
 def addRiotApi():

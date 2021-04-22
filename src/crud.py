@@ -46,13 +46,14 @@ class CRUDSummoners():
     def deleteUser(self, name):
         con =  self.conectarBase()
         cursorObj = con.cursor()
-        cursorObj.execute('SELECT ID FROM summoners where name="'+name+'"')
-        id = cursorObj.fetchall()
+        print(name)
+        cursorObj.execute("SELECT id FROM summoners where name='"+name+"'")
+        id = cursorObj.fetchone()
+        print(id[0])
         if( len(id) == 0):
-            print("El usuario no existe")
-            return
-        cursorObj.execute('DELETE FROM leagueTFT WHERE id="'+ id[0][0]+'"')
-        cursorObj.execute('DELETE FROM summoners WHERE id="'+ id[0][0]+'"')
+            raise Exception("No se ha encontrado al summoner")
+        cursorObj.execute("DELETE FROM leagueTFT WHERE id='"+ id[0]+"'")
+        cursorObj.execute("DELETE FROM summoners WHERE id='"+ id[0]+"'")
         con.commit()
         con.close()
 
@@ -160,6 +161,8 @@ class CRUDSummoners():
         read = cursorObj.fetchone()
         con.close()
         return read[0]
+
+
 
 
 class CRUDUser():

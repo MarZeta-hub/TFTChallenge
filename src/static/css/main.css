@@ -68,6 +68,21 @@ body{
     color: #ffffff;
 }
 
+.normativaContenedor{
+    color:#ffffff;
+    font-size: 20px;
+}
+
+.linkBackground{
+    background-color: #ffffff;
+}
+
+.fondoNegro{
+    background-color: #000000;
+    opacity: 0.9;
+    padding: 10px;
+}
+
 @media (max-width:800px){
     h3{
         font-size: 15px;
