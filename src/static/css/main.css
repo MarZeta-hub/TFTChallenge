@@ -17,6 +17,36 @@ body{
     position: fixed;
 }
 
+.contenedorPrincipal{
+    display:block;
+}
+
+.centradocentral{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+aside{
+    display:flex;
+    justify-content: space-around;
+}
+
+.discord{
+    width: 100%;
+    height: 300px;
+    margin-bottom: 10px;
+}
+
+
+.temporizadorBackground{
+	background-color: #000000b6;
+    padding:10px;
+    float:right;
+    margin-left: 10px;
+    height: 130px;
+}
+
 .cAccounts{
     display:flex;
     border: 1px solid #000000;
@@ -48,6 +78,11 @@ body{
 
 .ptotal{
     width: 6%;
+}
+
+.tituloBlanco{
+    color:aliceblue;
+    margin-bottom: 10px;
 }
 
 .tituloConBoton{
@@ -83,13 +118,29 @@ body{
     padding: 10px;
 }
 
-@media (max-width:800px){
+@media (max-width:1200px){
     h3{
         font-size: 15px;
     }
     h4{
         font-size: 13px;
     }
+    .contenedorPrincipal{
+        display:block;
+    }
+    
+    aside{
+        flex-direction: column;
+    }
 
+    .discord{
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .temporizadorBackground{
+        width: 100%;
+        margin-left: 0px;
+    }
 }
 
