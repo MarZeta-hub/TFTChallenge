@@ -24,3 +24,20 @@ ul#temporizador li p {
 	font-size: 25px;
 }
 
+@media (max-width:1200px){
+
+	ul#temporizador li span {
+		font-size: 10vw;
+	}
+
+	ul#temporizador li.seperator {
+		font-size: 10vw;
+		line-height: 70px;
+		vertical-align: top;
+	}
+
+	ul#temporizador li p {
+		font-size: 5vw;
+	}
+}
+

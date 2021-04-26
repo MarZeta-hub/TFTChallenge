@@ -44,7 +44,6 @@ aside{
     padding:10px;
     float:right;
     margin-left: 10px;
-    height: 130px;
 }
 
 .cAccounts{
@@ -142,5 +141,6 @@ aside{
         width: 100%;
         margin-left: 0px;
     }
+
 }
 
