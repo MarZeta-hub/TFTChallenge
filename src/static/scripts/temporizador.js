@@ -1,7 +1,7 @@
 
 $("#temporizador").countdown({
-    date: '04/28/2021 9:00:00',
+    date: '05/26/2021 6:00:00',
     contenedor: "#temporizador"
     }, function () {
-      alert('¡Empieza la competición: CORRE A JUGAR!');
+      alert('¡Se acabó la clasificatoria!');
     });
