@@ -23,6 +23,7 @@
                     <th scope="col">Tier</th>
                     <th scope="col">Lp</th>
                     <th scope="col">P.Total</th>
+                    <th scope="col">AVG</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,6 +40,7 @@
                     <td>-</td>
                     <td>-</td>
                     {% endif %}
+                    <td>{{ "{0:.1f}".format(user[7]) }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -17,8 +17,8 @@ class CRUDSummoners():
         # 2. Agregar Datos en nuestra base de datos
         con = self.conectarBase()
         cursorObj = con.cursor()
-        cursorObj.execute("INSERT INTO summoners (name, id, lvl) VALUES('"+summoner[0]+"','"+summoner[1]+"',"+summoner[2]+")")
-        cursorObj.execute("INSERT INTO leagueTFT (id, tier, rank, lp, ptotal, score) VALUES('"+summoner[1]+"','"+liga[0]+"','"+ liga[1]+"',"+ liga[2]+","+liga[3]+", "+liga[4]+")")
+        cursorObj.execute("INSERT INTO summoners (name, id, lvl, puuid) VALUES('"+summoner[0]+"','"+summoner[1]+"',"+summoner[2]+", '"+summoner[3]+"')")
+        cursorObj.execute("INSERT INTO leagueTFT (id, tier, rank, lp, ptotal, score, avgplacement) VALUES('"+summoner[1]+"','"+liga[0]+"','"+ liga[1]+"',"+ liga[2]+","+liga[3]+", "+liga[4]+", 0)")
         con.commit()
         con.close()
 
@@ -26,7 +26,7 @@ class CRUDSummoners():
     def readLeague(self):
         con = self.conectarBase()
         cursorObj = con.cursor()
-        cursorObj.execute('SELECT name, tier, rank, lp, ptotal, score, summoners.ID FROM summoners, leagueTFT where summoners.id = leagueTFT.id')
+        cursorObj.execute('SELECT name, tier, rank, lp, ptotal, score, avgplacement, summoners.ID FROM summoners, leagueTFT where summoners.id = leagueTFT.id')
         read = cursorObj.fetchall()
         con.close()
         return read
@@ -35,21 +35,40 @@ class CRUDSummoners():
     def updateLeague(self):
         con = self.conectarBase()
         cursorObj = con.cursor()
-        cursorObj.execute('SELECT ID FROM summoners')
+        cursorObj.execute('SELECT ID, puuid, name FROM summoners')
         ids = cursorObj.fetchall()
-        for id in ids:    
-            liga = self.getLiga(id)
-            cursorObj.execute("UPDATE leagueTFT SET tier ='"+liga[0]+"',rank='"+ liga[1]+"',lp="+ liga[2]+",ptotal="+liga[3]+", Score="+liga[4]+" where id ='"+id[0]+"'")
+        for id in ids:
+            puuid = id[1]
+            liga = self.getLiga(id[0])
+            cursorObj.execute("SELECT tier, rank, lp FROM leagueTFT where leagueTFT.id = '"+id[0]+"'")
+            ligaBase = cursorObj.fetchone()
+            if(liga[0] != ligaBase[0] or liga[1]!= ligaBase[1] or str(liga[2]) != str(ligaBase[2])):
+                matchs = self.getMatches(puuid)
+                for match in matchs:
+                    cursorObj.execute("SELECT * from matchrank WHERE matchid = '"+match+"'")
+                    if (len(cursorObj.fetchall()) == 0):
+                        nuevoMatch = self.getPlacementByMatch(match, puuid)
+                        cursorObj.execute("INSERT INTO matchrank (puuid, matchid, placement) VALUES ('"+puuid+"', '"+nuevoMatch[1]+"',"+str(nuevoMatch[2])+")")
+                cursorObj.execute("SELECT placement FROM matchrank where puuid = '"+puuid+"'")
+                placements = cursorObj.fetchall()
+                totalplacement = 0
+                avg = 0
+                for placement in placements:
+                    avg +=placement[0]
+                    totalplacement +=1
+                try:
+                    avg = avg/totalplacement
+                except ZeroDivisionError:
+                    avg = 0
+                cursorObj.execute("UPDATE leagueTFT SET tier ='"+liga[0]+"',rank='"+ liga[1]+"',lp="+ liga[2]+",ptotal="+liga[3]+", Score="+liga[4]+", avgplacement="+str(avg)+" where id ='"+id[0]+"'")
         con.commit()
         con.close()
 
     def deleteUser(self, name):
         con =  self.conectarBase()
         cursorObj = con.cursor()
-        print(name)
         cursorObj.execute("SELECT id FROM summoners where name='"+name+"'")
         id = cursorObj.fetchone()
-        print(id[0])
         if( len(id) == 0):
             raise Exception("No se ha encontrado al summoner")
         cursorObj.execute("DELETE FROM leagueTFT WHERE id='"+ id[0]+"'")
@@ -84,8 +103,30 @@ class CRUDSummoners():
             summoner = watchertft.summoner.by_name(self.my_region, name)
         except:
             raise Exception("Problemas para obtener datos de la api")
-        return (summoner["name"], summoner["id"], str(summoner["summonerLevel"]))
+        return ( summoner["name"], summoner["id"], str(summoner["summonerLevel"]), summoner["puuid"])
     
+    def getMatches(self, puuid):
+        # Buscar matchs de un usuario a través del puuid
+        watchertft = self.apiRiotInit()
+        try:
+            matches = watchertft.match.by_puuid("europe", puuid,100)
+        except ApiError:
+            raise Exception("Problemas para obtener datos de la api")
+        return matches
+
+    def getPlacementByMatch(self, matchid, puuid):
+        watchertft = self.apiRiotInit()
+        try:
+            match = watchertft.match.by_id("europe", matchid)
+        except ApiError:
+            raise Exception("Problemas para obtener datos de la api")
+        placement = 0
+        if(match["info"]["tft_game_type"] == "standard"):
+            for participants in match["info"]["participants"]:
+                if( participants["puuid"] == puuid):
+                    placement = participants["placement"]
+        return (puuid, matchid, placement)
+
     def apiRiotInit(self):
         return TftWatcher(self.readApi())
 
@@ -161,9 +202,6 @@ class CRUDSummoners():
         read = cursorObj.fetchone()
         con.close()
         return read[0]
-
-
-
 
 class CRUDUser():
 
