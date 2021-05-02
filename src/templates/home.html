@@ -28,8 +28,8 @@
             </thead>
             <tbody>
                 {% for user in lista %}
-                <tr>
-                    <th scope="row">{{ user[0] }}</th>
+                <tr {% if user[8] == True %}  class="updateSummon" {% endif %}>
+                    <th scope="row" >{{ user[0] }}</th>
                     <td>{{ user[1] }}</td>
                     {% if user[2] != "No hay datos" %}
                     <td>{{ user[2]}} {{ user[3] }}</td>
@@ -54,7 +54,7 @@
             sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
         </div>
         <div class="centradocentral">
-            <h2 class="tituloBlanco">Tiempo restante para comenzar el torneo</h2>
+            <h2 class="tituloBlanco">Fin del torneo</h2>
         <div class="temporizadorBackground">
             <ul id="temporizador">
                 <li><span class="days">00</span>

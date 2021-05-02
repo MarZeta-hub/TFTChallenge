@@ -26,7 +26,7 @@ class CRUDSummoners():
     def readLeague(self):
         con = self.conectarBase()
         cursorObj = con.cursor()
-        cursorObj.execute('SELECT name, tier, rank, lp, ptotal, score, avgplacement, summoners.ID FROM summoners, leagueTFT where summoners.id = leagueTFT.id')
+        cursorObj.execute('SELECT name, tier, rank, lp, ptotal, score, avgplacement, updatesummon, summoners.ID FROM summoners, leagueTFT where summoners.id = leagueTFT.id')
         read = cursorObj.fetchall()
         con.close()
         return read
@@ -42,6 +42,7 @@ class CRUDSummoners():
             liga = self.getLiga(id[0])
             cursorObj.execute("SELECT tier, rank, lp FROM leagueTFT where leagueTFT.id = '"+id[0]+"'")
             ligaBase = cursorObj.fetchone()
+            update = False
             if(liga[0] != ligaBase[0] or liga[1]!= ligaBase[1] or str(liga[2]) != str(ligaBase[2])):
                 matchs = self.getMatches(puuid)
                 for match in matchs:
@@ -60,7 +61,9 @@ class CRUDSummoners():
                     avg = avg/totalplacement
                 except ZeroDivisionError:
                     avg = 0
-                cursorObj.execute("UPDATE leagueTFT SET tier ='"+liga[0]+"',rank='"+ liga[1]+"',lp="+ liga[2]+",ptotal="+liga[3]+", Score="+liga[4]+", avgplacement="+str(avg)+" where id ='"+id[0]+"'")
+                cursorObj.execute("UPDATE leagueTFT SET tier ='"+liga[0]+"',rank='"+ liga[1]+"',lp="+ liga[2]+",ptotal="+liga[3]+", Score="+liga[4]+", avgplacement="+str(avg)+", updateSummon=True where id ='"+id[0]+"'")
+            else:
+                cursorObj.execute("UPDATE leagueTFT SET updateSummon=False where id ='"+id[0]+"'")
         con.commit()
         con.close()
 

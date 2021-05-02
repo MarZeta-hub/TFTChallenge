@@ -31,13 +31,13 @@ ul#temporizador li p {
 	}
 
 	ul#temporizador li.seperator {
-		font-size: 10vw;
+		font-size: 9vw;
 		line-height: 70px;
 		vertical-align: top;
 	}
 
 	ul#temporizador li p {
-		font-size: 5vw;
+		font-size: 3vw;
 	}
 }
 

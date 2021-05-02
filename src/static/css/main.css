@@ -38,10 +38,15 @@ aside{
     margin-bottom: 10px;
 }
 
+.updateSummon{
+    color:#67ff4d;
+}
+
 
 .temporizadorBackground{
 	background-color: #000000b6;
     padding:10px;
+    padding-bottom: 0px;
     float:right;
     margin-left: 10px;
 }
@@ -129,7 +134,7 @@ aside{
     }
     
     aside{
-        flex-direction: column;
+        flex-direction: column-reverse;
     }
 
     .discord{
