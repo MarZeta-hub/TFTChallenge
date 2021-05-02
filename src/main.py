@@ -9,14 +9,15 @@ main = Blueprint('main', __name__)
 def Home():
     lista = crud.readLeague()
     lista = crud.ordenarLista(lista)
-    return render_template('home.html', lista = lista)
+    update = crud.readUpdateTime()
+    return render_template('home.html', lista = lista, update=update)
 
 @main.route('/updateData')
 def updateData():
-    try:
-        crud.updateLeague()
-    except:
-        flash("Error al acceder a la Api de Riot.\n Póngase en contacto con el administrador de la página")
+    #try:
+    crud.updateLeague()
+    #except:
+    #flash("Error al acceder a la Api de Riot.\n Póngase en contacto con el administrador de la página")
     return redirect("/")
 
 @main.route('/about')

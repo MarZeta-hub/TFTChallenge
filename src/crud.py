@@ -1,5 +1,7 @@
 import sqlite3
 import time
+from datetime import date
+from datetime import datetime
 import psycopg2
 from src.user import User
 from riotwatcher import ApiError, TftWatcher
@@ -64,6 +66,7 @@ class CRUDSummoners():
                 cursorObj.execute("UPDATE leagueTFT SET tier ='"+liga[0]+"',rank='"+ liga[1]+"',lp="+ liga[2]+",ptotal="+liga[3]+", Score="+liga[4]+", avgplacement="+str(avg)+", updateSummon=True where id ='"+id[0]+"'")
             else:
                 cursorObj.execute("UPDATE leagueTFT SET updateSummon=False where id ='"+id[0]+"'")
+        cursorObj.execute("UPDATE riotAPI SET api='"+self.fechaActual()+"' where valor='lastupdate'")
         con.commit()
         con.close()
 
@@ -206,6 +209,25 @@ class CRUDSummoners():
         con.close()
         return read[0]
 
+    def readUpdateTime(self):
+        con = self.conectarBase()
+        cursorObj = con.cursor()
+        cursorObj.execute("SELECT api FROM riotapi where valor = 'lastupdate'")
+        read = cursorObj.fetchone()
+        con.close()
+        lastime = float(format(time.time() - float(read[0])))
+        minutos = int(lastime /60)
+        segundos = lastime % 60
+        print(lastime)
+        return "{0:.0f}".format(minutos)+" min : {0:.0f}".format(segundos)+" seg"
+        
+
+    def fechaActual(self):
+        return str(time.time())
+        
+       
+
+    
 class CRUDUser():
 
     database = "src/database/users.db"

@@ -9,8 +9,11 @@
 {% block content%}
 <header class="page-header tituloConBoton">
     <h1>Clasificación</h1>
-    <a href="{{ url_for('main.updateData') }}" class="derecha"><button type="button"
-            class="btn btn-primary btn-sm">Actualizar Clasificación</button></a>
+    <div class="flexActualizar derecha">
+        <h4 class="backgroundultimavez">Última Actualización: {{ update }}</h4>
+        <a href="{{ url_for('main.updateData') }}" ><button type="button"
+            class="btn btn-primary btn-sm btn-dark">Actualizar</button></a>
+    </div>
 </header>
 
 <div class="contenedorPrincipal">

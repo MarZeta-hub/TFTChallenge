@@ -42,6 +42,20 @@ aside{
     color:#67ff4d;
 }
 
+.flexActualizar{
+    display:flex;
+    align-items: center;
+}
+
+.backgroundultimavez{
+    background-color: #0000009b;
+    padding: 5px;
+    margin-right: 5px;
+    margin-bottom: 0px;
+    opacity: 0.9;
+    font-size: 12px;
+    border-radius: 10px;
+}
 
 .temporizadorBackground{
 	background-color: #000000b6;
