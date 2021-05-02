@@ -14,10 +14,10 @@ def Home():
 
 @main.route('/updateData')
 def updateData():
-    #try:
-    crud.updateLeague()
-    #except:
-    #flash("Error al acceder a la Api de Riot.\n Póngase en contacto con el administrador de la página")
+    try:
+        crud.updateLeague()
+    except:
+        flash("Error al acceder a la Api de Riot.\n Póngase en contacto con el administrador de la página")
     return redirect("/")
 
 @main.route('/about')
