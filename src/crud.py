@@ -2,7 +2,6 @@ import sqlite3
 import time
 from datetime import date
 from datetime import datetime
-import psycopg2
 from src.user import User
 from riotwatcher import ApiError, TftWatcher
 
@@ -10,7 +9,7 @@ class CRUDSummoners():
     my_region = 'euw1'
 
     def conectarBase(self):
-        return psycopg2.connect(host='ec2-35-174-35-242.compute-1.amazonaws.com', database="d2jupu9j7rqd7", user="rsqaemfmnjiqpw",  password="4049dfdb8302dbd1c5c86d5312d2d989ad0ee18fce5595758cc4872ffcfc77f1", sslmode='require')
+        return sqlite3.connect("src/database/data.sqlite")
 
     def createUser(self, name):
         # 1. Obtengo los datos del nuevo usuario
